@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useWeb3 } from '@/hooks/useWeb3'
 import { Header } from '@/components/Header'
 import { Dashboard } from '@/components/Dashboard'
@@ -17,8 +17,17 @@ export default function Home() {
   const { isConnected, address } = useWeb3()
   const [activeTab, setActiveTab] = useState<'dashboard' | 'register' | 'history' | 'shop'>('dashboard')
 
-  // En modo demo, mostrar la app incluso sin wallet conectada
-  const showApp = USE_MOCK_DATA || isConnected
+  // Mostrar la app solo si hay wallet conectada
+  // En modo demo, los componentes cargarán datos mock automáticamente
+  // Si no hay wallet, mostrar WelcomeScreen para que el usuario pueda conectar
+  const showApp = isConnected
+  
+  // Resetear tab cuando se desconecta
+  useEffect(() => {
+    if (!isConnected && !USE_MOCK_DATA) {
+      setActiveTab('dashboard')
+    }
+  }, [isConnected])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">

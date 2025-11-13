@@ -19,15 +19,22 @@ export function Web3Provider({ children }: { children: ReactNode }) {
   const [signer, setSigner] = useState<ethers.JsonRpcSigner | null>(null)
   const [address, setAddress] = useState<string | null>(null)
   const [isConnected, setIsConnected] = useState(false)
+  const [manuallyDisconnected, setManuallyDisconnected] = useState(false)
 
   useEffect(() => {
-    // Verificar si ya hay una wallet conectada
+    // Verificar si ya hay una wallet conectada al montar el componente
     if (typeof window !== 'undefined' && window.ethereum) {
       checkConnection()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkConnection = async () => {
+    // No verificar conexión si se desconectó manualmente
+    if (manuallyDisconnected) {
+      return
+    }
+    
     if (typeof window !== 'undefined' && window.ethereum) {
       try {
         const provider = new ethers.BrowserProvider(window.ethereum)
@@ -95,6 +102,11 @@ export function Web3Provider({ children }: { children: ReactNode }) {
       setSigner(signer)
       setAddress(address)
       setIsConnected(true)
+      setManuallyDisconnected(false)
+
+      // Remover listeners anteriores si existen
+      window.ethereum.removeAllListeners('accountsChanged')
+      window.ethereum.removeAllListeners('chainChanged')
 
       // Escuchar cambios de cuenta
       window.ethereum.on('accountsChanged', (accounts: string[]) => {
@@ -107,7 +119,9 @@ export function Web3Provider({ children }: { children: ReactNode }) {
 
       // Escuchar cambios de red
       window.ethereum.on('chainChanged', () => {
-        checkConnection()
+        if (!manuallyDisconnected) {
+          checkConnection()
+        }
       })
     } catch (error) {
       console.error('Error connecting wallet:', error)
@@ -120,6 +134,13 @@ export function Web3Provider({ children }: { children: ReactNode }) {
     setSigner(null)
     setAddress(null)
     setIsConnected(false)
+    setManuallyDisconnected(true)
+    
+    // Remover listeners de eventos
+    if (typeof window !== 'undefined' && window.ethereum) {
+      window.ethereum.removeAllListeners('accountsChanged')
+      window.ethereum.removeAllListeners('chainChanged')
+    }
   }
 
   return (

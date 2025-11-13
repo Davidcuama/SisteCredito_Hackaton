@@ -5,6 +5,11 @@ import { Shield, LogOut } from 'lucide-react'
 
 export function Header() {
   const { isConnected, address, disconnect } = useWeb3()
+  
+  const handleDisconnect = () => {
+    disconnect()
+    // No necesitamos recargar la página, el estado se actualizará automáticamente
+  }
 
   return (
     <header className="bg-white shadow-md border-b border-gray-100">
@@ -22,14 +27,41 @@ export function Header() {
             </div>
           </div>
           {isConnected && (
-            <div className="flex items-center gap-4">
-              <div className="text-sm">
-                <p className="text-gray-500">Conectado como</p>
-                <p className="font-mono text-gray-900">{address?.slice(0, 6)}...{address?.slice(-4)}</p>
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-right">
+                <p className="text-gray-500 text-xs">Conectado como</p>
+                <p className="font-mono text-gray-900 font-semibold">{address?.slice(0, 6)}...{address?.slice(-4)}</p>
               </div>
               <button
-                onClick={disconnect}
-                className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                onClick={async () => {
+                  if (window.ethereum) {
+                    try {
+                      // Intentar cambiar de cuenta primero
+                      await window.ethereum.request({
+                        method: 'wallet_requestPermissions',
+                        params: [{ eth_accounts: {} }]
+                      })
+                      // Si el usuario cancela o cambia de cuenta, el listener de accountsChanged lo manejará
+                    } catch (error) {
+                      // Si falla, simplemente desconectar
+                      disconnect()
+                    }
+                  } else {
+                    disconnect()
+                  }
+                }}
+                className="flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm"
+                title="Cambiar de wallet"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                Cambiar
+              </button>
+              <button
+                onClick={handleDisconnect}
+                className="flex items-center gap-2 px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm"
+                title="Desconectar wallet"
               >
                 <LogOut className="w-4 h-4" />
                 Desconectar
