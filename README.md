@@ -46,5 +46,6 @@ Ver documentación completa en `/docs`
 
 ## 👥 Equipo
 
-Desarrollado para el Reto Blockchain SisteCredito 2024
+Desarrollado para el Reto Blockchain SisteCredito 2025
+
 
