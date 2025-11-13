@@ -1,0 +1,50 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+cache/
+artifacts/
+coverage/
+coverage.json
+typechain/
+typechain-types/
+deployment-addresses*.json
+
+# Hardhat files
+cache/
+artifacts/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentación (solo mantener README.md)
+RESUMEN_SETUP_LOCAL.md
+GUIA_TOKENS_PRUEBA.md
+PROPUESTA_BENEFICIOS.md
+GUIA_SHIBUYA.md
+INICIO_RAPIDO.md
+GUIA_METAMASK.md
+RESUMEN_FINAL.md
+ESTADO_PROYECTO.md
+MEJORAS_FRONTEND.md
+INSTRUCCIONES_EJECUCION.md
+MEJORAS_IMPLEMENTADAS.md
+RESULTADOS_TESTING.md
+RESUMEN_MEJORAS.md
+RESUMEN_EJECUTIVO.md
+INSTRUCCIONES_INSTALACION.md
+*.pdf
+

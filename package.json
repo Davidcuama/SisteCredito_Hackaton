@@ -1,0 +1,33 @@
+{
+  "name": "sistecredito",
+  "version": "1.0.0",
+  "description": "Sistema de Acreditación del Pago Puntual mediante Blockchain",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:shibuya": "hardhat run scripts/deploy-shibuya.js --network shibuya",
+    "mint:tokens": "hardhat run scripts/mint-test-tokens.js",
+    "mint:tokens:local": "hardhat run scripts/mint-tokens-local.js",
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "solidity",
+    "web3",
+    "gamification"
+  ],
+  "author": "Equipo SisteCredito",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^16.3.1"
+  }
+}
